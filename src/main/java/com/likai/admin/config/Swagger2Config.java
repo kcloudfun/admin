@@ -31,14 +31,7 @@ public class Swagger2Config {
 	}
 
 	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder()
-				// 页面标题
-				.title("权限管理项目接口")
-				// 描述信息
-				.description("用户、角色、菜单管理")
-				// 作者人名，个人主页链接，邮箱地址
-				.contact(new Contact("likai", "www.kcloud.fun", "1414551714@qq.com"))
-				.build();
+		return new ApiInfoBuilder().build();
 	}
 
 }

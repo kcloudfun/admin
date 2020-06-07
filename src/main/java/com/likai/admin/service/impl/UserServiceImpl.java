@@ -1,29 +1,52 @@
 package com.likai.admin.service.impl;
 
-import java.util.List;
 
+import com.likai.admin.dao.ISysUserDao;
 import com.likai.admin.po.SysUser;
-import com.likai.admin.po.User;
+import com.likai.common.constant.ObjectSourceEnum;
+import com.likai.common.dao.ITemplateDao;
+import com.likai.common.util.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.likai.admin.dao.IUserDao;
-import com.likai.admin.service.IUserService;
-
+/**
+ * 使用Spring Security要求必须实现UserDetailsService，故不要再定义其他接口了，不然自动注入时会有问题。
+ * 只遵循一个接口规范，从代码角度来说也更加简单明了
+ */
 @Service
-public class UserServiceImpl implements IUserService {
+public class UserServiceImpl implements UserDetailsService {
 
-	@Autowired(required = false)
-	private IUserDao userDao;
+    @Autowired(required = false)
+    private ITemplateDao templateDao;
 
-	@Override
-	public List<User> getAll() {
-		return userDao.selectAll();
-	}
+    @Autowired(required = false)
+    private ISysUserDao sysUserDao;
 
-	@Override
-	public void addUser(SysUser user) {
-		//templateDao.oneInsert("sys_user", BeanUtils.bean2map(user,0));
-	}
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
+    public boolean addUser(SysUser user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        int a = templateDao.oneInsert("sys_user", BeanUtils.bean2map(user, ObjectSourceEnum.NORMAL.getValue()));
+        if (a == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
+        SysUser user = sysUserDao.selectUserByName(name);
+        if (user != null) {
+            return user;
+        } else {
+            throw new UsernameNotFoundException("用户" + name + "未找到");
+        }
+
+    }
 }

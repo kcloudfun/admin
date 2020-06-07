@@ -16,7 +16,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
  * @author likai
  *
  */
-@MapperScan("com.likai.admin.dao") // 扫描dao
+@MapperScan({"com.likai.admin.dao","com.likai.common.dao"}) // 扫描dao
 @Configuration
 public class MybatisConfig {
 
@@ -29,7 +29,7 @@ public class MybatisConfig {
 		sessionFactory.setDataSource(dataSource);// 获取数据源
 		sessionFactory.setTypeAliasesPackage("com.likai.admin.po");// 扫描model
 		PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-		sessionFactory.setMapperLocations(resolver.getResources("classpath:sqlmap/*.xml"));// 扫描xml文件
+		sessionFactory.setMapperLocations(resolver.getResources("classpath*:sqlmap/*.xml"));// 扫描xml文件
 		return sessionFactory.getObject();
 	}
 

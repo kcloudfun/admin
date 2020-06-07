@@ -3,7 +3,6 @@ package com.likai.admin.controller;
 
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
-import com.likai.admin.po.User;
 import com.likai.admin.vo.CommonResult;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;

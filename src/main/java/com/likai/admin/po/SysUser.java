@@ -1,177 +1,132 @@
 package com.likai.admin.po;
 
+import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
 import java.util.Date;
 
-public class SysUser {
-    private Long id;
+/**
+ * 使用Spring Security要求必须实现UserDetails，以提供更多的信息给框架
+ */
+@Data
+public class SysUser implements UserDetails {
+    /**
+     * 编号
+     */
+    private Integer id;
 
+    /**
+     * 用户名
+     */
     private String name;
 
+    /**
+     * 昵称
+     */
     private String nickName;
 
+    /**
+     * 头像
+     */
     private String avatar;
 
+    /**
+     * 密码
+     */
     private String password;
 
+    /**
+     * 加密盐
+     */
     private String salt;
 
+    /**
+     * 邮箱
+     */
     private String email;
 
+    /**
+     * 手机号
+     */
     private String mobile;
 
-    private Byte status;
+    /**
+     * 状态：0禁用，1正常
+     */
+    private Integer status;
 
-    private Long deptId;
+    /**
+     * 机构id
+     */
+    private Integer deptId;
 
+    /**
+     * 创建人
+     */
     private String createBy;
 
+    /**
+     * 创建时间
+     */
     private Date createTime;
 
+    /**
+     * 更新人
+     */
     private String lastUpdateBy;
 
+    /**
+     * 更新时间
+     */
     private Date lastUpdateTime;
 
-    private Byte delFlag;
+    /**
+     * 是否删除：-1已删除，0正常
+     */
+    private Integer delFlag;
 
-    public SysUser(Long id, String name, String nickName, String avatar, String password, String salt, String email, String mobile, Byte status, Long deptId, String createBy, Date createTime, String lastUpdateBy, Date lastUpdateTime, Byte delFlag) {
-        this.id = id;
-        this.name = name;
-        this.nickName = nickName;
-        this.avatar = avatar;
-        this.password = password;
-        this.salt = salt;
-        this.email = email;
-        this.mobile = mobile;
-        this.status = status;
-        this.deptId = deptId;
-        this.createBy = createBy;
-        this.createTime = createTime;
-        this.lastUpdateBy = lastUpdateBy;
-        this.lastUpdateTime = lastUpdateTime;
-        this.delFlag = delFlag;
+
+    /**
+     * 用户被授予权限的集合
+     *
+     * @return
+     */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
     }
 
-    public SysUser() {
-        super();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
-
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName == null ? null : nickName.trim();
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar == null ? null : avatar.trim();
-    }
-
+    @Override
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
-    public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
+    @Override
+    public String getUsername() {
+        return this.name;
     }
 
-    public String getSalt() {
-        return salt;
+    //以下是用来设置用户是否到期、有效等状态的，由于业务暂时不涉及，故默认都给true，默认通过
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public void setSalt(String salt) {
-        this.salt = salt == null ? null : salt.trim();
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-    public String getEmail() {
-        return email;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
-    public void setEmail(String email) {
-        this.email = email == null ? null : email.trim();
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile == null ? null : mobile.trim();
-    }
-
-    public Byte getStatus() {
-        return status;
-    }
-
-    public void setStatus(Byte status) {
-        this.status = status;
-    }
-
-    public Long getDeptId() {
-        return deptId;
-    }
-
-    public void setDeptId(Long deptId) {
-        this.deptId = deptId;
-    }
-
-    public String getCreateBy() {
-        return createBy;
-    }
-
-    public void setCreateBy(String createBy) {
-        this.createBy = createBy == null ? null : createBy.trim();
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getLastUpdateBy() {
-        return lastUpdateBy;
-    }
-
-    public void setLastUpdateBy(String lastUpdateBy) {
-        this.lastUpdateBy = lastUpdateBy == null ? null : lastUpdateBy.trim();
-    }
-
-    public Date getLastUpdateTime() {
-        return lastUpdateTime;
-    }
-
-    public void setLastUpdateTime(Date lastUpdateTime) {
-        this.lastUpdateTime = lastUpdateTime;
-    }
-
-    public Byte getDelFlag() {
-        return delFlag;
-    }
-
-    public void setDelFlag(Byte delFlag) {
-        this.delFlag = delFlag;
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

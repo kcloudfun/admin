@@ -3,34 +3,24 @@ package com.likai.admin.controller;
 import java.util.List;
 
 import com.likai.admin.po.SysUser;
-import com.likai.admin.po.User;
+import com.likai.admin.service.impl.UserServiceImpl;
 import com.likai.admin.vo.CommonResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.likai.admin.service.IUserService;
 
 @RestController
 @RequestMapping("/admin/user/v1")
 public class UserManagementController {
 
-	@Autowired
-	private IUserService userService;
+    @Autowired
+    private UserServiceImpl userService;
 
-	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
-	public CommonResult<?> getAllUser() {
-		CommonResult<List<User>> res = new CommonResult<>();
-		res.setData(userService.getAll());
-		return res;
-	}
-	
-	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public CommonResult<?> addUser(@RequestBody SysUser user) {
-		CommonResult<List<User>> res = new CommonResult<>();
-		userService.addUser(user);
-		return res;
-	}
+    @PostMapping("/add")
+    public CommonResult<?> addUser(@RequestBody SysUser user) {
+        CommonResult<Boolean> res = new CommonResult<>();
+        boolean flag = userService.addUser(user);
+        res.setData(flag);
+        return res;
+    }
 }
